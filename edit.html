@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Itini | 旅のタイムライン</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <div class="bg-decoration"></div>
+
+        <div class="container timeline-container">
+            <header class="edit-header">
+                <a href="index.html" class="back-link">←戻る</a>
+                <h1 v-if="trip">{{ trip.title }}</h1>
+                <p class="trip-info" v-if="trip">{{ trip.destination }} | {{ trip.start_date }}</p>
+            </header>
+
+            <main>
+                <div class="timeline">
+                    <div v-for="(act, index) in activities" :key="index" class="timeline-item">
+                        <div class="time">{{ act.start_time }}</div>
+                        <div class="dot"></div>
+                        <div class="content glass-card">
+                            <h3>{{ act.activity_name }}</h3>
+                            <p v-if="act.memo">{{ act.memo }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="add-section glass-card">
+                    <h3>新しい予定を追加</h3>
+                    <div class="grid">
+                        <input type="text" v-model="newActivity.activity_name" placeholder="何をする？">
+                        <input type="time" v-model="newActivity.start_time">
+                    </div>
+                    <button @click="addActivity" class="btn-indigo">追加する</button>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="js/edit.js"></script>
+</body>
+
+</html>
