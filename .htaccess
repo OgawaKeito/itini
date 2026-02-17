@@ -1,0 +1,13 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # HTTPSへのリダイレクト（SSL強制）
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# ディレクトリの中身（ファイル一覧）を見せない
+Options -Indexes
+
+# エラーページの設定（任意：404ページなどがあれば）
+# ErrorDocument 404 /404.html
