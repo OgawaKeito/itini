@@ -6,11 +6,13 @@
     <title>Itini | 編集</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="css/responsive.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body class="edit-page">
-    <div id="app">
+    <div id="app" v-cloak>
         <div class="bg-decoration"></div>
 
         <div class="container">
@@ -23,6 +25,7 @@
                 </a>
                 <p class="subtitle">記憶に残る、藍色のしおり。</p>
             </header>
+            
             <header class="trip-header" v-if="trip">
                 <h2>{{ trip.title }}</h2>
                 <p>
@@ -32,13 +35,13 @@
                 <a href="index.html" class="back-link">← TOPへ戻る</a>
             </header>
 
-            <div class="timeline-layout">
+            <div class="timeline-layout" v-if="trip">
                 <main class="timeline-view">
                     <div v-if="activities.length === 0" class="glass-card empty-state">
                         <p>まだ予定がありません。<br>右側のフォームから追加してください。</p>
                     </div>
 
-                    <div v-for="act in activities" :key="act.id" class="timeline-item glass-card">
+                    <div v-for="act in displayedActivities" :key="act.id" class="timeline-item glass-card">
                         <div class="time-disp">
                             <span class="day-label">Day {{ act.day_number }}</span>
                             {{ act.start_time.substring(0,5) }}
@@ -48,7 +51,7 @@
                             <div class="act-name">{{ act.activity_name }}</div>
                             
                             <a v-if="act.location" 
-                               :href="`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(trip.destination + ' ' + act.location)}`" 
+                               :href="'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(act.location)" 
                                target="_blank" 
                                class="act-location">
                                 📍 {{ act.location }}
@@ -62,39 +65,44 @@
                             <button @click="deleteActivity(act.id)" class="action-btn delete-btn" title="削除">×</button>
                         </div>
                     </div>
+
+                    <div v-if="activities.length > 8" class="expand-section" style="text-align:center; margin-top:20px;">
+                        <button @click="isExpanded = !isExpanded" class="btn-indigo" style="width:auto; padding:10px 30px; border-radius:30px;">
+                            <span v-if="!isExpanded">
+                                あと {{ activities.length - 8 }} 件を表示 <i class="fas fa-chevron-down"></i>
+                            </span>
+                            <span v-else>
+                                閉じる <i class="fas fa-chevron-up"></i>
+                            </span>
+                        </button>
+                    </div>
                 </main>
 
                 <aside class="sidebar">
                     <div class="sticky-form glass-card">
                         <h3>予定を追加</h3>
-                        
                         <div class="input-group">
                             <label>何日目？</label>
                             <select v-model="newAct.day_number">
                                 <option v-for="n in totalDays" :key="n" :value="n">{{ n }}日目</option>
                             </select>
                         </div>
-
                         <div class="input-group">
                             <label>時間</label>
-                            <input type="time" v-model="newAct.start_time">
+                            <input type="time" v-model="newAct.start_time" step="900" required>
                         </div>
-
                         <div class="input-group">
                             <label>内容</label>
                             <input type="text" v-model="newAct.activity_name" placeholder="例：ランチ、観光">
                         </div>
-
                         <div class="input-group">
                             <label>行き先</label>
-                            <input type="text" v-model="newAct.location" placeholder="例：カフェ〇〇、清水寺">
+                            <input type="text" v-model="newAct.location" placeholder="例：カフェ〇〇">
                         </div>
-
                         <div class="input-group">
                             <label>メモ</label>
-                            <textarea v-model="newAct.memo" placeholder="予算や予約情報など" rows="2"></textarea>
+                            <textarea v-model="newAct.memo" placeholder="詳細など" rows="2"></textarea>
                         </div>
-
                         <button @click="addActivity" class="btn-indigo">追加する</button>
                     </div>
                 </aside>
@@ -104,34 +112,28 @@
         <div v-if="isEditing" class="modal-overlay" @click.self="isEditing = false">
             <div class="glass-card modal-content">
                 <h3>予定を編集</h3>
-                
                 <div class="input-group">
                     <label>何日目？</label>
                     <select v-model="editingActivity.day_number">
                         <option v-for="n in totalDays" :key="n" :value="n">{{ n }}日目</option>
                     </select>
                 </div>
-
                 <div class="input-group">
                     <label>時間</label>
-                    <input type="time" v-model="editingActivity.start_time">
+                    <input type="time" v-model="editingActivity.start_time" step="900">
                 </div>
-
                 <div class="input-group">
                     <label>内容</label>
                     <input type="text" v-model="editingActivity.activity_name">
                 </div>
-
                 <div class="input-group">
                     <label>行き先</label>
                     <input type="text" v-model="editingActivity.location">
                 </div>
-
                 <div class="input-group">
                     <label>メモ</label>
                     <textarea v-model="editingActivity.memo" rows="3"></textarea>
                 </div>
-
                 <div class="modal-actions">
                     <button @click="updateActivity" class="btn-indigo">保存する</button>
                     <button @click="isEditing = false" class="btn-cancel">キャンセル</button>
@@ -139,12 +141,12 @@
             </div>
         </div>
     </div>
+    
     <footer class="main-footer">
-        <div class="footer-links">
-            <a href="terms.html">利用規約</a>
-        </div>
-        <p class="copyright">&copy; 2026 OgawaKeito</p>
+        <div class="footer-links"><a href="terms.html">利用規約</a></div>
+        <p class="copyright">© 2026 OgawaKeito</p>
     </footer>
+    
     <script src="js/edit.js"></script>
 </body>
 </html>

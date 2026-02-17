@@ -1,35 +1,49 @@
-const { createApp, ref, onMounted } = Vue;
+const { createApp, ref, onMounted, computed } = Vue;
 
 createApp({
     setup() {
-        // データ保持用
+        // --- 状態管理データ ---
         const trip = ref(null);
         const activities = ref([]);
         const totalDays = ref(1);
         const shareId = new URLSearchParams(window.location.search).get('id');
 
-        // 新規追加フォーム用データ
+        // 新規追加用
         const newAct = ref({
             day_number: 1,
             start_time: '',
             activity_name: '',
-            location: '', // 行き先を追加
+            location: '',
             memo: ''
         });
 
-        // 編集モード用データ
+        // 編集用
         const isEditing = ref(false);
         const editingActivity = ref({});
 
-        // --- データ読み込み ---
+        // ★アコーディオン開閉フラグ
+        const isExpanded = ref(false);
+
+        // ★画面に表示するアクティビティを計算 (8件制限ロジック)
+        const displayedActivities = computed(() => {
+            // 開いている、または全部で8件以下なら、全て表示
+            if (isExpanded.value || activities.value.length <= 8) {
+                return activities.value;
+            }
+            // 閉じているなら、最初の8件だけを切り出す
+            return activities.value.slice(0, 8);
+        });
+
+        // --- データ読み込み (キャッシュ回避付き) ---
         const loadData = async () => {
             if (!shareId) return;
             try {
-                const res = await axios.get(`api/get_trip.php?id=${shareId}`);
+                // ?t=... をつけてブラウザに新しいデータだと認識させる
+                const res = await axios.get(`api/get_trip.php?id=${shareId}&t=${new Date().getTime()}`);
                 trip.value = res.data.trip;
                 activities.value = res.data.activities;
 
-                // 日数の計算
+                // 日数計算
                 const start = new Date(trip.value.start_date);
                 const end = new Date(trip.value.end_date);
                 totalDays.value = Math.floor((end - start) / (1000 * 60 * 60 * 24)) + 1;
@@ -46,12 +60,13 @@ createApp({
             }
 
             try {
+                // 保存完了を待つ
                 await axios.post('api/add_activity.php', {
                     share_id: shareId,
                     ...newAct.value
                 });
                 
-                // フォームのリセット（入力しやすいように日数は維持、他はクリア）
+                // フォームのリセット (日数は維持)
                 const currentDay = newAct.value.day_number;
                 newAct.value = {
                     day_number: currentDay,
@@ -61,7 +76,7 @@ createApp({
                     memo: ''
                 };
                 
-                await loadData(); // リスト更新
+                await loadData(); // 最新データを再取得
             } catch (e) {
                 alert("追加に失敗しました");
             }
@@ -70,7 +85,6 @@ createApp({
         // --- 削除 ---
         const deleteActivity = async (id) => {
             if (!confirm("本当に削除しますか？")) return;
-            
             try {
                 await axios.post('api/delete_activity.php', { id: id });
                 await loadData();
@@ -81,7 +95,6 @@ createApp({
 
         // --- 編集モーダルを開く ---
         const openEditModal = (act) => {
-            // 元データを直接いじらないようコピーを作成
             editingActivity.value = { ...act };
             isEditing.value = true;
         };
@@ -100,17 +113,11 @@ createApp({
         onMounted(loadData);
 
         return {
-            trip,
-            activities,
-            totalDays,
-            newAct,
-            addActivity,
-            // 追加機能
-            deleteActivity,
-            openEditModal,
-            updateActivity,
-            isEditing,
-            editingActivity
+            trip, activities, totalDays, newAct,
+            addActivity, deleteActivity, openEditModal, updateActivity,
+            isEditing, editingActivity,
+            // 追加: アコーディオン用
+            isExpanded, displayedActivities
         };
     }
 }).mount('#app');

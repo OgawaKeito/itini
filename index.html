@@ -6,11 +6,12 @@
     <title>Itini | 旅を藍色に染める</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="css/responsive.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    <div id="app">
+    <div id="app" v-cloak>
         <div class="bg-decoration"></div>
         <div class="container">
             <header class="main-header">
@@ -21,7 +22,8 @@
                     </div>
                 </a>
                 <p class="subtitle">記憶に残る、藍色のしおり。</p>
-            </header>            <main>
+            </header>
+            <main>
                 <div v-if="!generatedUrl" class="glass-card" style="max-width: 600px; margin: 0 auto;">
                     <div class="input-group">
                         <label>旅のタイトル</label>
@@ -38,7 +40,12 @@
                         </div>
                         <div class="input-group">
                             <label>何日間？</label>
-                            <input type="number" v-model="trip.duration" min="1" placeholder="3">
+                            <select v-model="trip.duration" required>
+                                <option value="" disabled selected>日数を選択してください</option>
+                                <option v-for="n in 14" :key="n" :value="n">
+                                    {{ n }}日間 
+                                </option>
+                            </select>
                         </div>
                     </div>
                     <button @click="createTrip" class="btn-indigo">しおりを創り出す</button>
@@ -63,9 +70,7 @@
         </div>
     </div>
     <footer class="main-footer">
-        <div class="footer-links">
-            <a href="terms.html">利用規約</a>
-        </div>
+        <div class="footer-links"><a href="terms.html">利用規約</a></div>
         <p class="copyright">&copy; 2026 OgawaKeito</p>
     </footer>
     <script src="js/app.js"></script>
