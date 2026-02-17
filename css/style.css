@@ -1,310 +1,514 @@
+@import url('https://fonts.googleapis.com/css2?family=Italiana&display=swap');
 :root {
-    --indigo-dark: #1a237e;
-    --indigo-main: #303f9f;
-    --indigo-light: #c5cae9;
-    --text-white: #ffffff;
-    --glass-bg: rgba(255, 255, 255, 0.1);
+    --indigo-dark: #0d1117;
+    --indigo-main: #1a237e;
+    --indigo-accent: #5c6bc0;
+    --indigo-light: #7986cb;
+    --text-main: #ffffff;
+    --text-sub: #9fa8da;
+    --glass-bg: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.15);
+    --danger-color: #ef5350;
 }
 
+/* ロゴのリンク化スタイル */
+.logo-link {
+    text-decoration: none; /* 下線を消す */
+    color: inherit; /* 文字色を親要素から継承 */
+    display: inline-block;
+    transition: transform 0.3s, opacity 0.3s;
+    cursor: pointer;
+}
+
+.logo-link:hover {
+    opacity: 0.8; /* ホバー時に少し薄く */
+    transform: scale(1.02); /* ほんの少しだけ拡大してインタラクティブ感を出す */
+}
+
+/* 以前設定したグラデーション文字の設定を維持するために、
+   logo-main へのスタイルが上書きされないよう注意（既存のままでOKですが念のため確認） */
+
+/* =========================================
+   Base Styles
+   ========================================= */
 body {
     margin: 0;
     padding: 0;
     font-family: 'Noto Sans JP', sans-serif;
-    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-    color: var(--text-white);
+    background: linear-gradient(135deg, var(--indigo-dark) 0%, var(--indigo-main) 100%);
+    color: var(--text-main);
     min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     overflow-x: hidden;
 }
 
+/* 背景の幻想的な光 */
 .bg-decoration {
-    position: absolute;
-    /* fixed ではなく絶対配置に戻す */
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(48, 63, 159, 0.4) 0%, transparent 70%);
-    top: -200px;
-    right: -100px;
+    position: fixed;
+    top: -150px;
+    right: -150px;
+    width: 60vw;
+    height: 60vw;
+    max-width: 800px;
+    max-height: 800px;
+    background: radial-gradient(circle, rgba(92, 107, 192, 0.25) 0%, transparent 70%);
+    filter: blur(80px);
     z-index: -1;
     pointer-events: none;
-    /* これだけは念のため追加（クリック操作を邪魔しないため） */
 }
 
 .container {
-    width: 90vw;
-    min-width: 500px;
-    max-width: 800px;
+    width: min(90vw, 1100px);
+    margin: 0 auto;
+    padding: 40px 20px;
     text-align: center;
+    box-sizing: border-box;
 }
 
-/* 画面幅が 500px 以下のデバイス（スマホなど）への対応 */
-@media (max-width: 500px) {
-    .container {
-        min-width: 100%;
-        /* はみ出さないように 100% に上書き */
-        width: 95vw;
-    }
-
-    .glass-card {
-        padding: 20px;
-        /* カード内の余白も少し削って画面を広く使う */
-    }
+.main-header {
+    margin-bottom: 50px;
+    position: relative;
+    z-index: 1; /* 背景装飾より手前に */
 }
 
-.logo {
-    font-size: 3rem;
-    font-weight: 700;
-    letter-spacing: 4px;
+.logo-container {
+    display: inline-block;
+    position: relative;
+    padding: 10px 0;
+}
+
+/* フリガナ部分 */
+.logo-ruby {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--indigo-light);
+    letter-spacing: 0.5em; /* 文字間を広げて空気感を出す */
+    margin-bottom: -5px; /* メイン文字に少し近づける */
+    opacity: 0.8;
+    font-family: 'Noto Sans JP', sans-serif; /* 日本語はゴシック体でスッキリと */
+}
+
+/* メインロゴ Itini */
+.logo-main {
+    font-family: 'Italiana', serif; /* オシャレなセリフ体 */
+    font-size: 4.5rem; /* インパクトある大きさに */
+    font-weight: 400; /* 細身のままで */
     margin: 0;
-    background: linear-gradient(to bottom, #fff, #9fa8da);
+    line-height: 1;
+    letter-spacing: 0.1em;
+    background: linear-gradient(to bottom, #fff, #c5cae9); /* わずかにグラデーション */
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    text-shadow: 0 4px 20px rgba(92, 107, 192, 0.3); /* 淡い光彩 */
 }
 
+/* サブタイトル */
 .subtitle {
+    margin-top: 15px;
     font-size: 0.9rem;
+    color: var(--text-sub);
+    letter-spacing: 0.2em;
+    opacity: 0.7;
     font-weight: 300;
-    letter-spacing: 2px;
-    margin-bottom: 2rem;
-    opacity: 0.8;
 }
 
-main {
-    width: auto;
-    /* 親要素に合わせて自動伸縮 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    /* 外側に少し余白を確保 */
+/* スマホ対応 */
+@media (max-width: 600px) {
+    .logo-main {
+        font-size: 3.5rem;
+    }
+    .logo-ruby {
+        font-size: 0.8rem;
+    }
 }
 
+/* =========================================
+   Components: Glass Card
+   ========================================= */
 .glass-card {
-    width: 100%;
-    /* 親の main に対して目いっぱい広がる */
-    max-width: 450px;
-    /* ただし、広がりすぎないように上限を設定 */
     background: var(--glass-bg);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 24px;
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
     padding: 30px;
-    /* 内側の余白を少し調整 */
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    box-sizing: border-box;
-    /* パディングを含めて幅を計算 */
+    transition: transform 0.3s ease;
 }
 
+/* =========================================
+   Components: Forms & Inputs
+   ========================================= */
 .input-group {
+    margin-bottom: 20px;
     text-align: left;
-    margin-bottom: 1.5rem;
 }
 
 label {
     display: block;
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    font-size: 0.85rem;
+    color: var(--text-sub);
     margin-bottom: 8px;
-    color: var(--indigo-light);
+    letter-spacing: 0.05em;
 }
 
-input {
+input, select, textarea {
     width: 100%;
+    padding: 14px;
     background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
-    padding: 12px 10px;
-    /* 横のパディングを少し削る */
-    color: white;
-    font-size: 0.95rem;
-    /* ほんの少し小さくして収まりを良く */
-    transition: all 0.3s ease;
+    border: 1px solid var(--glass-border);
+    border-radius: 10px;
+    color: var(--text-main);
+    font-size: 1rem;
+    font-family: inherit;
     box-sizing: border-box;
-    /* はみ出し防止の要 */
-    min-width: 0;
-    /* FlexやGrid内での意図しない広がりを防止 */
-}
-
-input:focus {
     outline: none;
-    border-color: #5c6bc0;
-    box-shadow: 0 0 15px rgba(92, 107, 192, 0.4);
-    /* ぼんやり光る藍色 */
-    background: rgba(0, 0, 0, 0.3);
+    transition: border-color 0.3s, background 0.3s;
 }
 
-/* Chromeなどの日付アイコンの色を調整（オプション） */
-input::-webkit-calendar-picker-indicator {
-    filter: invert(1);
-    /* アイコンを白くして藍色に合わせる */
-    cursor: pointer;
+input:focus, select:focus, textarea:focus {
+    border-color: var(--indigo-accent);
+    background: rgba(0, 0, 0, 0.4);
 }
 
-.date-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    /* PCでは2列 */
-    gap: 1rem;
+/* 数値入力の矢印（スピナー）を消す */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type=number] {
+    -moz-appearance: textfield;
 }
 
-/* スマホなど画面幅が狭い(480px以下)時は1列に */
-@media (max-width: 480px) {
-    .date-grid {
-        grid-template-columns: 1fr;
-        gap: 0;
-        /* 縦並びの時は間隔を調整 */
-    }
-}
-
+/* =========================================
+   Components: Buttons
+   ========================================= */
 .btn-indigo {
     width: 100%;
     padding: 16px;
-    margin-top: 1rem;
-    background: linear-gradient(90deg, #3949ab, #5c6bc0);
+    background: var(--indigo-accent);
     color: white;
     border: none;
-    border-radius: 12px;
-    font-size: 1rem;
+    border-radius: 10px;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(57, 73, 171, 0.4);
+    letter-spacing: 0.1em;
+    transition: all 0.3s;
+    margin-top: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 
 .btn-indigo:hover {
+    background: var(--indigo-light);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(57, 73, 171, 0.6);
+    box-shadow: 0 6px 20px rgba(92, 107, 192, 0.4);
 }
 
-.btn-indigo:active {
-    transform: translateY(0);
-}
-
-.url-display-area {
-    animation: fadeIn 0.6s ease-out;
-}
-
-.url-copy-group {
+/* =========================================
+   Action Buttons (Edit / Delete)
+   ========================================= */
+.act-actions {
     display: flex;
-    gap: 10px;
-    align-items: center;
-    background: rgba(0, 0, 0, 0.3);
-    padding: 5px;
-    border-radius: 12px;
+    flex-direction: column; /* ボタンを縦に並べるか、横にするかはお好みで。今回は横並び推奨 */
+    gap: 8px;
+    margin-left: 10px;
+    flex-shrink: 0; /* 幅が縮まないように固定 */
 }
 
-.url-copy-group input {
-    border: none;
-    background: transparent;
-    font-size: 0.85rem;
-    color: #9fa8da;
+/* ご指定の 50px サイズ */
+.action-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px; /* 少し角丸に */
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-sub);
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.edit-btn:hover {
+    background: var(--indigo-accent);
+    color: white;
+    border-color: var(--indigo-accent);
+}
+
+.delete-btn:hover {
+    background: var(--danger-color);
+    color: white;
+    border-color: var(--danger-color);
+}
+
+/* =========================================
+   Layout: Edit Page (Timeline & Sidebar)
+   ========================================= */
+.timeline-layout {
+    display: grid;
+    grid-template-columns: 1fr 350px; /* 左:メイン(可変) 右:フォーム(固定) */
+    gap: 40px;
+    align-items: start;
+    text-align: left;
+    margin-top: 30px;
+}
+
+.trip-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+.trip-header h2 {
+    font-size: 2.5rem;
+    margin: 0 0 10px 0;
+    letter-spacing: 0.1em;
+}
+.trip-header p {
+    color: var(--text-sub);
+    font-size: 1rem;
+}
+.back-link {
+    display: inline-block;
+    margin-top: 10px;
+    color: var(--text-sub);
+    text-decoration: none;
+    font-size: 0.9rem;
+    border-bottom: 1px solid transparent;
+    transition: 0.3s;
+}
+.back-link:hover {
+    color: white;
+    border-bottom-color: white;
+}
+
+/* サイドバー固定 */
+.sticky-form {
+    position: sticky;
+    top: 30px;
+}
+.sticky-form h3 {
+    margin-top: 0;
+    color: var(--indigo-accent);
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+/* =========================================
+   Timeline Items
+   ========================================= */
+.timeline-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* 上揃え */
+    margin-bottom: 20px;
+    padding: 25px;
+    border-left: 4px solid var(--indigo-accent);
+    position: relative;
+    transition: background 0.3s;
+}
+
+.timeline-item:hover {
+    background: rgba(255, 255, 255, 0.12); /* ホバー時に少し明るく */
+}
+
+/* 左側：時間表示 */
+.time-disp {
+    min-width: 70px;
+    font-weight: 700;
+    color: var(--indigo-accent);
+    font-size: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    margin-right: 15px;
+}
+.day-label {
+    font-size: 0.7rem;
+    color: var(--text-sub);
+    font-weight: normal;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* 真ん中：コンテンツ */
+.act-content {
     flex-grow: 1;
+    overflow-wrap: break-word; /* 長い文字の折り返し */
+}
+
+.act-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    line-height: 1.4;
+}
+
+.act-location {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9rem;
+    color: var(--indigo-light);
+    text-decoration: none;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    transition: 0.3s;
+}
+.act-location:hover {
+    background: var(--indigo-accent);
+    color: white;
+    transform: translateX(3px);
+}
+
+.act-memo {
+    font-size: 0.9rem;
+    color: var(--text-sub);
+    white-space: pre-wrap;
+    line-height: 1.6;
+    margin-top: 5px;
+    border-top: 1px dashed rgba(255,255,255,0.1);
+    padding-top: 8px;
+}
+
+/* =========================================
+   Modal (Pop-up)
+   ========================================= */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content {
+    width: 90%;
+    max-width: 500px;
+    background: #1a237e; /* 透過なしの濃い色で視認性確保 */
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+.modal-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.btn-cancel {
+    width: 100%;
+    padding: 16px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.3);
+    color: var(--text-sub);
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+.btn-cancel:hover {
+    background: rgba(255,255,255,0.1);
+    color: white;
+    border-color: white;
 }
 
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
 }
 
-.back-link {
-    color: var(--indigo-light);
-    font-size: 0.8rem;
-    opacity: 0.7;
-    transition: 0.3s;
-}
-
-.back-link:hover {
-    opacity: 1;
-}
-
-footer {
-    margin-top: 2rem;
-    font-size: 0.7rem;
-    opacity: 0.5;
-}
-
-/* タイムラインのデザイン */
-.timeline-container {
-    padding-top: 20px;
-    width: min(90vw, 95vw);
-    /* 前回のこだわりを継承 */
-}
-
-.edit-header {
-    margin-bottom: 30px;
-    text-align: left;
-}
-
-.back-link {
-    color: var(--indigo-light);
-    text-decoration: none;
-    font-size: 0.8rem;
-}
-
-.timeline {
-    position: relative;
-    margin: 40px 0;
-    padding-left: 30px;
-    border-left: 2px solid rgba(255, 255, 255, 0.1);
-}
-
-.timeline-item {
-    position: relative;
-    margin-bottom: 30px;
-    text-align: left;
-}
-
-.timeline-item .dot {
-    position: absolute;
-    left: -37px;
-    top: 5px;
-    width: 12px;
-    height: 12px;
-    background: #5c6bc0;
-    border-radius: 50%;
-    box-shadow: 0 0 10px #5c6bc0;
-}
-
-.timeline-item .time {
-    font-size: 0.8rem;
-    color: var(--indigo-light);
-    margin-bottom: 5px;
-}
-
-.add-section h3 {
-    margin-bottom: 0.5rem;
-    /* 見出し下の余白を微調整 */
-}
-
-.add-section .grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    /* 「何をする？」を広めに、時間を狭めに */
-    gap: 15px;
-    align-items: end;
-    /* 下揃えにしてラインを綺麗に見せる */
-}
-
-.add-section input {
-    margin-top: 0.5rem;
-    /* 重なりすぎない程度の程よい余白 */
-    width: 100%;
-}
-
-/* スマホ対応：幅が狭い時は縦に積む */
-@media (max-width: 480px) {
-    .add-section .grid {
+/* =========================================
+   Responsive Design (Mobile)
+   ========================================= */
+@media (max-width: 850px) {
+    /* レイアウトを縦積みに */
+    .timeline-layout {
         grid-template-columns: 1fr;
+        gap: 30px;
     }
+    
+    /* 入力フォームを上に持ってくる */
+    .sidebar {
+        order: -1; 
+    }
+    .sticky-form {
+        position: static; /* 固定解除 */
+    }
+
+    /* タイムラインアイテムの調整 */
+    .timeline-item {
+        padding: 15px;
+        flex-wrap: wrap; /* コンテンツが多い時に崩れないように */
+    }
+
+    .time-disp {
+        font-size: 1rem;
+        min-width: 50px;
+        margin-right: 10px;
+    }
+
+    /* ★アクションボタンのレスポンシブ調整 */
+    /* モバイルでは50pxだと大きすぎて邪魔になる可能性があるため、少し調整 */
+    .act-actions {
+        flex-direction: row; /* 横並びにする */
+        width: 100%;
+        justify-content: flex-end; /* 右寄せ */
+        margin-top: 15px; /* コンテンツとの間隔 */
+        margin-left: 0;
+    }
+
+    .action-btn {
+        width: 44px; /* スマホでは少し小さくてもOK（44pxはApple推奨のタッチサイズ） */
+        height: 44px;
+        font-size: 1rem;
+    }
+}
+
+/* フッター全体 */
+.main-footer {
+    margin-top: 80px;
+    padding: 40px 0;
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-sub);
+    font-size: 0.8rem;
+    position: relative;
+    z-index: 10;
+}
+
+/* リンク（利用規約など） */
+.footer-links {
+    margin-bottom: 15px;
+}
+
+.footer-links a {
+    color: var(--text-sub);
+    text-decoration: none;
+    margin: 0 10px;
+    opacity: 0.6;
+    transition: opacity 0.3s;
+    letter-spacing: 0.05em;
+}
+
+.footer-links a:hover {
+    opacity: 1;
+    color: white;
+    text-decoration: underline;
+}
+
+/* 版権表示 OgawaKeito */
+.copyright {
+    margin: 0;
+    opacity: 0.4;
+    font-family: 'Italiana', serif; /* ロゴと同じフォントで統一感を */
+    letter-spacing: 0.1em;
+    font-size: 0.9rem;
 }

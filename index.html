@@ -1,80 +1,73 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Itini | 藍に溶ける旅のしおり</title>
+    <title>Itini | 旅を藍色に染める</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
-
 <body>
     <div id="app">
         <div class="bg-decoration"></div>
-
         <div class="container">
-            <header>
-                <h1 class="logo">Itini</h1>
-                <p class="subtitle">想い出を藍色に染める、旅の記録</p>
-            </header>
-
-            <main>
-                <div v-if="!generatedUrl" class="glass-card">
+            <header class="main-header">
+                <a href="index.html" class="logo-link">
+                    <div class="logo-container">
+                        <span class="logo-ruby">イティニ</span>
+                        <h1 class="logo-main">Itini</h1>
+                    </div>
+                </a>
+                <p class="subtitle">記憶に残る、藍色のしおり。</p>
+            </header>            <main>
+                <div v-if="!generatedUrl" class="glass-card" style="max-width: 600px; margin: 0 auto;">
                     <div class="input-group">
-                        <label>Trip Title</label>
-                        <input type="text" v-model="trip.title" placeholder="例：藍色の夜会">
+                        <label>旅のタイトル</label>
+                        <input type="text" v-model="trip.title" placeholder="例：卒業旅行 in 北海道">
                     </div>
                     <div class="input-group">
-                        <label>Destination</label>
-                        <input type="text" v-model="trip.destination" placeholder="例：中目黒">
+                        <label>行き先</label>
+                        <input type="text" v-model="trip.destination" placeholder="例：札幌・小樽">
                     </div>
-                    <div class="date-grid">
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
                         <div class="input-group">
-                            <label>Start Date</label>
+                            <label>開始日</label>
                             <input type="date" v-model="trip.start_date">
                         </div>
                         <div class="input-group">
-                            <label>End Date</label>
-                            <input type="date" v-model="trip.end_date">
+                            <label>何日間？</label>
+                            <input type="number" v-model="trip.duration" min="1" placeholder="3">
                         </div>
                     </div>
-                    <button @click="createTrip" :disabled="loading" class="btn-indigo">
-                        <span v-if="!loading">しおりを創り出す</span>
-                        <span v-else>生成中...</span>
-                    </button>
+                    <button @click="createTrip" class="btn-indigo">しおりを創り出す</button>
                 </div>
 
-                <div v-else class="glass-card url-display-area">
-                    <h3 style="color: var(--indigo-light); margin-bottom: 1rem;">URLが発行されました</h3>
-                    <p style="font-size: 0.8rem; margin-bottom: 1.5rem;">このURLを保存して、旅程の編集を開始してください。</p>
-
-                    <div class="url-copy-group">
+                <div v-else class="glass-card" style="max-width: 600px; margin: 0 auto; animation: fadeIn 0.5s;">
+                    <h3 style="color: var(--indigo-accent);">しおりが完成しました</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-sub); margin-bottom: 20px;">
+                        このURLが旅への入り口です。<br>コピーして共有し、ブラウザで開いて編集してください。
+                    </p>
+                    
+                    <div style="display: flex; gap: 10px; margin-bottom: 20px;">
                         <input type="text" :value="generatedUrl" readonly id="urlInput">
-                        <button @click="copyUrl" class="btn-indigo"
-                            style="width: auto; padding: 10px 20px; margin: 0;">コピー</button>
+                        <button @click="copyUrl" class="btn-indigo" style="width: auto; margin: 0;">Copy</button>
                     </div>
 
-                    <a :href="generatedUrl" class="btn-indigo"
-                        style="display: block; text-decoration: none; margin-top: 20px;">
+                    <a :href="generatedUrl" class="btn-indigo" style="display: block; text-decoration: none; text-align: center; width: auto;">
                         編集画面へ移動する
                     </a>
-
-                    <button @click="generatedUrl = ''" class="back-link"
-                        style="background:none; border:none; margin-top:15px; cursor:pointer;">
-                        ← 新しく作り直す
-                    </button>
                 </div>
             </main>
-
-            <footer>
-                <p>&copy; 2026 Itini Project. Inspired by Indigo.</p>
-            </footer>
         </div>
     </div>
+    <footer class="main-footer">
+        <div class="footer-links">
+            <a href="terms.html">利用規約</a>
+        </div>
+        <p class="copyright">&copy; 2026 OgawaKeito</p>
+    </footer>
     <script src="js/app.js"></script>
 </body>
-
 </html>
