@@ -113,14 +113,22 @@ body {
     border-radius: 16px;
     padding: 30px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .input-group { margin-bottom: 20px; text-align: left; }
-label { display: block; font-size: 0.85rem; color: var(--text-sub); margin-bottom: 8px; letter-spacing: 0.05em; }
+
+label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-sub);
+    margin-bottom: 8px;
+    letter-spacing: 0.05em;
+}
 
 input, select, textarea {
-    width: 100%; padding: 14px;
+    width: 100%;
+    padding: 12px 15px;
     background: rgba(0, 0, 0, 0.2);
     border: 1px solid var(--glass-border);
     border-radius: 10px;
@@ -129,31 +137,75 @@ input, select, textarea {
     font-family: inherit;
     box-sizing: border-box;
     outline: none;
-    transition: border-color 0.3s, background 0.3s;
+    transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
+    -webkit-appearance: none;
+    appearance: none;
 }
 input:focus, select:focus, textarea:focus {
     border-color: var(--indigo-accent);
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.35);
+    box-shadow: 0 0 0 3px rgba(92, 107, 192, 0.2);
 }
-input[type=number]::-webkit-outer-spin-button,
-input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-input[type=number] { -moz-appearance: textfield; }
 
+/* selectの矢印 */
+select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%239fa8da' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+    cursor: pointer;
+}
+
+/* =========================================
+   Time Input（統一・整理）
+   ========================================= */
+input[type="time"] {
+    position: relative;
+    min-height: 50px;
+    cursor: pointer;
+    padding-right: 42px;
+    font-size: 16px; /* iOSズーム防止 */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%237986cb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpolyline points='12 6 12 12 16 14'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 20px;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+input[type="number"] { -moz-appearance: textfield; }
+
+/* =========================================
+   Button
+   ========================================= */
 .btn-indigo {
-    width: 100%; padding: 16px;
+    width: 100%; padding: 15px;
     background: var(--indigo-accent);
     color: white;
     border: none; border-radius: 10px;
     font-weight: 700; cursor: pointer;
-    letter-spacing: 0.1em;
-    transition: all 0.3s;
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    transition: all 0.25s;
     margin-top: 10px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.2);
 }
 .btn-indigo:hover {
     background: var(--indigo-light);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(92, 107, 192, 0.4);
+    box-shadow: 0 6px 20px rgba(92, 107, 192, 0.45);
+}
+.btn-indigo:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
 /* =========================================
@@ -171,10 +223,18 @@ input[type=number] { -moz-appearance: textfield; }
 .trip-header { text-align: center; margin-bottom: 40px; }
 .trip-header h2 { font-size: 2.5rem; margin: 0 0 10px 0; letter-spacing: 0.1em; }
 .trip-header p { color: var(--text-sub); font-size: 1rem; }
+
+.destination-tag, .date-tag {
+    display: inline-block;
+    margin: 0 8px;
+}
+
 .back-link {
-    display: inline-block; margin-top: 10px; color: var(--text-sub);
-    text-decoration: none; font-size: 0.9rem; border-bottom: 1px solid transparent;
-    transition: 0.3s;
+    display: inline-block; margin-top: 12px; color: var(--text-sub);
+    text-decoration: none; font-size: 0.9rem;
+    border-bottom: 1px solid transparent;
+    transition: color 0.3s, border-color 0.3s;
+    padding-bottom: 2px;
 }
 .back-link:hover { color: white; border-bottom-color: white; }
 
@@ -183,6 +243,7 @@ input[type=number] { -moz-appearance: textfield; }
     margin-top: 0; color: var(--indigo-accent);
     border-bottom: 1px solid var(--glass-border);
     padding-bottom: 15px; margin-bottom: 20px;
+    font-size: 1rem; letter-spacing: 0.05em;
 }
 
 /* =========================================
@@ -190,68 +251,116 @@ input[type=number] { -moz-appearance: textfield; }
    ========================================= */
 .timeline-item {
     display: flex; justify-content: space-between; align-items: flex-start;
-    margin-bottom: 20px; padding: 25px;
-    border-left: 4px solid var(--indigo-accent);
-    position: relative; transition: background 0.3s;
+    margin-bottom: 16px; padding: 22px 25px;
+    border-left: 3px solid var(--indigo-accent);
+    border-radius: 16px;
+    position: relative;
+    transition: background 0.25s, border-color 0.25s, transform 0.2s;
 }
-.timeline-item:hover { background: rgba(255, 255, 255, 0.12); }
+.timeline-item:hover {
+    background: rgba(255, 255, 255, 0.11);
+    border-left-color: var(--indigo-light);
+    transform: translateX(3px);
+}
 
 .time-disp {
-    min-width: 70px; margin-right: 15px;
-    font-weight: 700; color: var(--indigo-accent); font-size: 1.2rem;
-    display: flex; flex-direction: column; text-align: center;
+    min-width: 64px; margin-right: 18px;
+    font-weight: 700; color: var(--indigo-accent); font-size: 1.15rem;
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    flex-shrink: 0;
 }
 .day-label {
-    font-size: 0.7rem; color: var(--text-sub); font-weight: normal;
-    margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.05em;
+    font-size: 0.68rem; color: var(--text-sub); font-weight: 500;
+    margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.08em;
+    background: rgba(92, 107, 192, 0.2);
+    padding: 2px 6px; border-radius: 4px;
 }
 
-.act-content { flex-grow: 1; overflow-wrap: break-word; }
-.act-name { font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; line-height: 1.4; }
+.act-content { flex-grow: 1; overflow-wrap: break-word; min-width: 0; }
+.act-name { font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; line-height: 1.4; }
 .act-location {
     display: inline-flex; align-items: center; gap: 5px;
-    font-size: 0.9rem; color: var(--indigo-light); text-decoration: none;
+    font-size: 0.85rem; color: var(--indigo-light); text-decoration: none;
     background: rgba(0, 0, 0, 0.2); padding: 4px 10px;
-    border-radius: 6px; margin-bottom: 8px; transition: 0.3s;
+    border-radius: 6px; margin-bottom: 8px;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
-.act-location:hover { background: var(--indigo-accent); color: white; transform: translateX(3px); }
+.act-location:hover {
+    background: var(--indigo-accent); color: white; transform: translateX(3px);
+}
 .act-memo {
-    font-size: 0.9rem; color: var(--text-sub); white-space: pre-wrap;
-    line-height: 1.6; margin-top: 5px;
-    border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 8px;
+    font-size: 0.87rem; color: var(--text-sub); white-space: pre-wrap;
+    line-height: 1.7; margin-top: 6px;
+    border-top: 1px dashed rgba(255,255,255,0.08); padding-top: 8px;
 }
 
-.act-actions { display: flex; flex-direction: column; gap: 8px; margin-left: 10px; flex-shrink: 0; }
-.action-btn {
-    width: 50px; height: 50px; border-radius: 12px;
-    border: 1px solid rgba(255,255,255,0.1); background: rgba(255, 255, 255, 0.05);
-    color: var(--text-sub); cursor: pointer; font-size: 1.2rem;
-    display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+.act-actions {
+    display: flex; flex-direction: column; gap: 8px;
+    margin-left: 12px; flex-shrink: 0;
 }
-.edit-btn:hover { background: var(--indigo-accent); color: white; border-color: var(--indigo-accent); }
-.delete-btn:hover { background: var(--danger-color); color: white; border-color: var(--danger-color); }
+.action-btn {
+    width: 38px; height: 38px; border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-sub); cursor: pointer; font-size: 1.1rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+}
+.edit-btn:hover { background: var(--indigo-accent); color: white; border-color: var(--indigo-accent); transform: scale(1.1); }
+.delete-btn:hover { background: var(--danger-color); color: white; border-color: var(--danger-color); transform: scale(1.1); }
+
+/* =========================================
+   Empty State
+   ========================================= */
+.empty-state {
+    text-align: center;
+    padding: 50px 30px;
+    color: var(--text-sub);
+    font-size: 0.95rem;
+    line-height: 1.8;
+    opacity: 0.7;
+}
+
+/* =========================================
+   Accordion / Expand Section
+   ========================================= */
+.expand-section {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
 
 /* =========================================
    Modal & Footer
    ========================================= */
 .modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px);
+    background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(10px);
     display: flex; justify-content: center; align-items: center;
-    z-index: 9999; animation: fadeIn 0.3s ease-out;
+    z-index: 9999; animation: fadeIn 0.25s ease-out;
 }
 .modal-content {
     width: 90%; max-width: 500px;
-    background: #1a237e; border: 1px solid rgba(255,255,255,0.3);
+    background: rgba(26, 35, 126, 0.95);
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
 }
-.modal-actions { display: flex; gap: 15px; margin-top: 25px; }
+.modal-content h3 {
+    margin-top: 0; color: var(--indigo-accent);
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 15px; margin-bottom: 20px;
+}
+.modal-actions { display: flex; gap: 12px; margin-top: 20px; }
+
 .btn-cancel {
-    width: 100%; padding: 16px; background: transparent;
-    border: 1px solid rgba(255,255,255,0.3); color: var(--text-sub);
-    border-radius: 10px; cursor: pointer; font-weight: bold;
-    transition: 0.3s; margin-top: 10px;
+    width: 100%; padding: 15px; background: transparent;
+    border: 1px solid rgba(255,255,255,0.25); color: var(--text-sub);
+    border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 0.95rem;
+    transition: background 0.25s, color 0.25s, border-color 0.25s;
+    margin-top: 10px;
 }
-.btn-cancel:hover { background: rgba(255,255,255,0.1); color: white; border-color: white; }
+.btn-cancel:hover { background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.5); }
 
 .main-footer {
     margin-top: 80px; padding: 40px 0; text-align: center;
@@ -259,69 +368,20 @@ input[type=number] { -moz-appearance: textfield; }
     color: var(--text-sub); font-size: 0.8rem;
     position: relative; z-index: 10;
 }
-.footer-links { margin-bottom: 15px; }
+.footer-links { margin-bottom: 12px; }
 .footer-links a {
     color: var(--text-sub); text-decoration: none; margin: 0 10px;
-    opacity: 0.6; transition: opacity 0.3s; letter-spacing: 0.05em;
+    opacity: 0.6; transition: opacity 0.3s, color 0.3s; letter-spacing: 0.05em;
 }
-.footer-links a:hover { opacity: 1; color: white; text-decoration: underline; }
-.copyright { margin: 0; opacity: 0.4; font-family: 'Italiana', serif; letter-spacing: 0.1em; font-size: 0.9rem; }
+.footer-links a:hover { opacity: 1; color: white; }
+.copyright { margin: 0; opacity: 0.35; font-family: 'Italiana', serif; letter-spacing: 0.1em; font-size: 0.9rem; }
 
-@keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-
-/* --- 時間入力の操作性向上 --- */
-input[type="time"] {
-    position: relative; /* 基準位置にする */
-    min-height: 50px;   /* 指で押しやすい高さ確保 */
-    cursor: pointer;    /* 指カーソルにする */
-}
-
-/* Chrome, Edge, Safari用：時計アイコンを全体に拡張して透明にする裏技 */
-input[type="time"]::-webkit-calendar-picker-indicator {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0; /* 透明にする */
-    cursor: pointer;
+/* =========================================
+   Animations
+   ========================================= */
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.97); }
+    to   { opacity: 1; transform: scale(1); }
 }
 
-/* 視覚的な「時計アイコン」を背景として自前で置く（藍色） */
-input[type="time"] {
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%237986cb'%3e%3cpath d='M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z'/%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 15px center;
-    background-size: 24px;
-    padding-right: 45px; /* アイコンとかぶらないように */
-}
-
-/* --- アコーディオン展開ボタン --- */
-.expand-section {
-    text-align: center;
-    margin-top: 10px;
-    margin-bottom: 30px;
-}
-
-.btn-expand {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--text-sub);
-    border: 1px solid var(--glass-border);
-    padding: 10px 30px;
-    border-radius: 30px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.3s;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.btn-expand:hover {
-    background: var(--indigo-accent);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-}
+[v-cloak] { display: none; }
