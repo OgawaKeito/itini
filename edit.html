@@ -3,13 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Itini | 編集</title>
+    
+    <title>Itini | 旅を藍色に染める</title>
+    <meta name="description" content="「Itini（イティニ）」は、記憶に残る藍色の旅のしおりを簡単に作成・共有できる無料のWebサービスです。友達や家族とスケジュールをシェアして、最高の旅行を作りましょう。">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Itini | 旅を藍色に染める">
+    <meta property="og:description" content="記憶に残る、藍色の旅のしおりを簡単に作成・共有。">
+    <meta property="og:url" content="https://itini.ogawa.jp.net/">
+    <meta property="og:site_name" content="Itini">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/responsive.css?v=20260226-2">
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="edit-page">
     <div id="app" v-cloak>
@@ -37,7 +45,24 @@
 
             <div class="timeline-layout" v-if="trip">
                 <main class="timeline-view">
-                    <div v-if="activities.length === 0" class="glass-card empty-state">
+                    
+                    <div class="day-filter" v-if="totalDays > 1">
+                        <button 
+                            @click="selectedDay = 'all'" 
+                            :class="{ active: selectedDay === 'all' }" 
+                            class="filter-btn">
+                            すべて
+                        </button>
+                        <button 
+                            v-for="n in totalDays" :key="'filter-'+n" 
+                            @click="selectedDay = n" 
+                            :class="{ active: selectedDay === n }" 
+                            class="filter-btn">
+                            Day {{ n }}
+                        </button>
+                    </div>
+
+                    <div v-if="filteredActivities.length === 0" class="glass-card empty-state">
                         <p>まだ予定がありません。<br>右側のフォームから追加してください。</p>
                     </div>
 
@@ -57,7 +82,7 @@
                                 📍 {{ act.location }}
                             </a>
 
-                            <div class="act-memo" v-if="act.memo">{{ act.memo }}</div>
+                            <div class="act-memo" v-if="act.memo" v-html="formatMemo(act.memo)"></div>
                         </div>
 
                         <div class="act-actions">
@@ -66,10 +91,10 @@
                         </div>
                     </div>
 
-                    <div v-if="activities.length > 8" class="expand-section" style="text-align:center; margin-top:20px;">
+                    <div v-if="filteredActivities.length > 8" class="expand-section" style="text-align:center; margin-top:20px;">
                         <button @click="isExpanded = !isExpanded" class="btn-indigo" style="width:auto; padding:10px 30px; border-radius:30px;">
                             <span v-if="!isExpanded">
-                                あと {{ activities.length - 8 }} 件を表示 <i class="fas fa-chevron-down"></i>
+                                あと {{ filteredActivities.length - 8 }} 件を表示 <i class="fas fa-chevron-down"></i>
                             </span>
                             <span v-else>
                                 閉じる <i class="fas fa-chevron-up"></i>
@@ -145,8 +170,9 @@
     <footer class="main-footer">
         <div class="footer-links"><a href="terms.html">利用規約</a></div>
         <p class="copyright">© 2026 OgawaKeito</p>
+        <p class="copyright">v2.0</p>
     </footer>
     
-    <script src="js/edit.js"></script>
+    <script src="js/edit.js?v=20260226-2"></script>
 </body>
 </html>

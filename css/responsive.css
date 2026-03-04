@@ -1,61 +1,61 @@
 @charset "UTF-8";
 
 /* =========================================
-   Tablet / Small Laptop (max-width: 850px)
+   Tablet (max-width: 850px)
    ========================================= */
 @media (max-width: 850px) {
-    /* コンテナの余白を少し詰める */
+
     .container {
-        padding: 20px 15px;
-        width: 95vw;
+        padding: 28px 14px 60px;
+        width: 96vw;
     }
 
-    /* タイムラインのレイアウトを縦積みに */
+    /* 縦1カラムに */
     .timeline-layout {
-        grid-template-columns: 1fr; /* 1カラムに */
-        gap: 30px;
-    }
-    
-    /* 入力フォームをメインコンテンツの上に持ってくる */
-    .sidebar {
-        order: -1; 
-    }
-    
-    /* サイドバーの追従固定を解除（縦積みだと邪魔になるため） */
-    .sticky-form {
-        position: static; 
+        grid-template-columns: 1fr;
+        gap: 22px;
     }
 
-    /* カード内の余白を少し減らす */
+    /* フォームを上に */
+    .sidebar { order: -1; }
+    .sticky-form { position: static; }
+
+    /* タブレットでは縦ステムライン・ドットを非表示
+       （縦積みレイアウトでは left: 53px が意味をなさないため） */
+
+
     .timeline-item {
-        padding: 20px;
-        flex-wrap: wrap; /* コンテンツが多い時に崩れないように */
+        padding: 18px 20px;
+        flex-wrap: wrap;
+        /* hover で translateX しない（横スクロールの原因になるため） */
+        transition: background 0.22s, border-color 0.22s, box-shadow 0.22s;
     }
+    .timeline-item:hover { transform: none; }
 
-    /* 時間表示の調整 */
+    /* time-disp のパディングオフセットも解除 */
     .time-disp {
         font-size: 1rem;
-        min-width: 50px;
-        margin-right: 15px;
-        margin-bottom: 10px; /* スマホでは時間の下に余白 */
+        min-width: 52px;
+        margin-right: 14px;
+        padding-left: 0;
     }
 
-    /* アクションボタン（編集・削除）を右下に配置 */
+    /* アクションボタンを下部横並びに */
     .act-actions {
-        flex-direction: row; /* 横並びにする */
+        flex-direction: row;
         width: 100%;
-        justify-content: flex-end; /* 右寄せ */
-        margin-top: 15px;
+        justify-content: flex-end;
+        margin-top: 14px;
         margin-left: 0;
         padding-top: 10px;
-        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        border-top: 1px solid rgba(255, 255, 255, 0.06);
+        gap: 10px;
     }
-
-    /* ボタンサイズをタッチしやすい大きさに最適化 */
     .action-btn {
         width: 44px;
         height: 44px;
         font-size: 1rem;
+        border-radius: 10px;
     }
 }
 
@@ -63,37 +63,78 @@
    Mobile (max-width: 600px)
    ========================================= */
 @media (max-width: 600px) {
-    /* ロゴサイズをスマホ用に縮小 */
-    .logo-main {
-        font-size: 3rem;
-    }
-    .logo-ruby {
-        font-size: 0.75rem;
-    }
-    
-    /* ヘッダーの余白を詰める */
-    .main-header {
-        margin-bottom: 30px;
-    }
-    
-    /* タイトル文字サイズ調整 */
+
+    /* ロゴ */
+    .logo-main  { font-size: 3rem; }
+    .logo-ruby  { font-size: 0.72rem; }
+    .main-header { margin-bottom: 30px; }
+
+    /* トリップヘッダー */
     .trip-header h2 {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
+        word-break: break-all;
+    }
+    .trip-header > p {
+        flex-direction: column;
+        gap: 6px;
+        align-items: center;
     }
 
-    /* カードの余白をさらに詰めて画面を有効活用 */
+    /* カード */
     .glass-card {
-        padding: 20px;
+        padding: 18px 16px;
+        border-radius: 14px;
     }
 
-    /* 入力フォームのラベルを見やすく */
-    label {
-        font-size: 0.9rem;
+    /* フォーム */
+    label { font-size: 0.85rem; }
+    input,
+    select,
+    textarea {
+        font-size: 16px; /* iOSズーム防止 */
+        padding: 11px 13px;
     }
 
-    /* ボタンを押しやすく */
-    .btn-indigo, .btn-cancel {
-        padding: 14px;
-        font-size: 1rem;
+    /* ボタン */
+    .btn-indigo,
+    .btn-cancel { padding: 14px; font-size: 1rem; }
+
+    /* タイムライン */
+    .timeline-item   { padding: 14px 16px; margin-bottom: 10px; }
+    .time-disp       { font-size: 0.95rem; min-width: 46px; margin-right: 12px; }
+    .act-name        { font-size: 0.99rem; }
+    .act-location    { font-size: 0.81rem; }
+    .act-memo        { font-size: 0.83rem; }
+
+    /* フィルター */
+    .day-filter  { gap: 6px; }
+    .filter-btn  { padding: 6px 12px; font-size: 0.82rem; }
+
+    /* モーダル */
+    .modal-content { width: 96%; padding: 22px 18px; }
+
+    /* アコーディオン展開ボタン */
+    .expand-section button {
+        width: 100% !important;
+        border-radius: 12px !important;
     }
+
+    /* index.html の日付・日数グリッドを縦積みに
+       （inline style で grid が書かれているので !important で上書き） */
+    .container main > .glass-card > div[style*="grid"] {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* フッター */
+    .main-footer { margin-top: 56px; padding: 28px 0; }
+}
+
+/* =========================================
+   極小 (max-width: 380px)
+   ========================================= */
+@media (max-width: 380px) {
+    .logo-main      { font-size: 2.6rem; }
+    .trip-header h2 { font-size: 1.4rem; }
+    .glass-card     { padding: 14px 12px; }
+    .filter-btn     { padding: 5px 10px; font-size: 0.78rem; }
 }
