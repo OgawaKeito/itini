@@ -111,6 +111,6 @@ Lolipop! Managed Cloud などのサーバーにファイルを転送し、ドキ
 
 ---
 
-## ライセンス
+## 著作権
 
-このプロジェクトは個人利用を目的としています。
+Copyright © Ogawa Keito. All rights reserved.
