@@ -111,6 +111,6 @@ Lolipop! Managed Cloud などのサーバーにファイルを転送し、ドキ
 
 ---
 
-## 著作権
+## ライセンス
 
-Copyright © Ogawa Keito. All rights reserved.
+[MIT License](LICENSE)
