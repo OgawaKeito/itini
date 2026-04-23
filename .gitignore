@@ -1,1 +1,22 @@
+<<<<<<< HEAD
 db_comfig.php
+=======
+# 機密情報
+api/db_config.php
+
+# OS系
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# エディタ系
+.vscode/
+.idea/
+
+# 環境変数
+.env
+.env.local
+
+# PHP
+vendor/
+>>>>>>> ddcc4af7011e3fa7f036e8677d4899dbc5205b1e

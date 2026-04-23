@@ -2,22 +2,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Italiana&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
 
 /* =========================================
-   CSS Variables
+   Variables
    ========================================= */
 :root {
-    --indigo-dark:   #0b0f1e;
-    --indigo-mid:    #111a5c;
-    --indigo-accent: #5c6bc0;
-    --indigo-light:  #7986cb;
-    --indigo-bright: #9fa8da;
-    --text-main:     #eef0ff;
-    --text-sub:      #8a97d4;
-    --glass-bg:      rgba(255, 255, 255, 0.06);
-    --glass-border:  rgba(255, 255, 255, 0.11);
-    --danger:        #ef5350;
-    --radius-card:   18px;
-    --radius-input:  11px;
-    --radius-btn:    11px;
+    --indigo-dark:    #0b0f1e;
+    --indigo-mid:     #111a5c;
+    --indigo-accent:  #5c6bc0;
+    --indigo-light:   #7986cb;
+    --indigo-bright:  #9fa8da;
+    --text-main:      #eef0ff;
+    --text-sub:       #8a97d4;
+    --glass-bg:       rgba(255, 255, 255, 0.06);
+    --glass-border:   rgba(255, 255, 255, 0.11);
+    --danger:         #ef5350;
+    --radius-card:    18px;
+    --radius-input:   11px;
+    --radius-btn:     11px;
 }
 
 /* =========================================
@@ -38,7 +38,7 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* 背景グラデーション層 */
+/* 多層背景グラデーション */
 body::before {
     content: '';
     position: fixed;
@@ -108,7 +108,6 @@ body::before {
     padding: 8px 0 12px;
 }
 
-/* ロゴ下の細いライン */
 .logo-container::after {
     content: '';
     display: block;
@@ -138,7 +137,6 @@ body::before {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    /* text-shadow は -webkit-text-fill-color: transparent と共存できないので filter で代用 */
     filter: drop-shadow(0 3px 16px rgba(92, 107, 192, 0.35));
 }
 
@@ -165,14 +163,13 @@ body::before {
 }
 
 /* =========================================
-   Form — input-group, label, inputs
+   Form
    ========================================= */
 .input-group {
     margin-bottom: 20px;
     text-align: left;
 }
 
-/* フォーカス中にラベルが明るくなる */
 .input-group:focus-within > label {
     color: var(--indigo-bright);
 }
@@ -232,9 +229,9 @@ select {
     cursor: pointer;
 }
 
-/* time input — アイコン付き・iOSズーム防止 */
+/* time input */
 input[type="time"] {
-    font-size: 16px;
+    font-size: 16px; /* iOSズーム防止 */
     min-height: 48px;
     padding-right: 42px;
     cursor: pointer;
@@ -245,7 +242,6 @@ input[type="time"] {
     position: relative;
 }
 
-/* clickable 範囲をinput全体に拡張 */
 input[type="time"]::-webkit-calendar-picker-indicator {
     position: absolute;
     inset: 0;
@@ -255,7 +251,6 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     cursor: pointer;
 }
 
-/* number スピナー非表示 */
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -286,12 +281,11 @@ input[type="number"] { -moz-appearance: textfield; }
     overflow: hidden;
 }
 
-/* 光沢レイヤー */
 .btn-indigo::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(160deg, rgba(255,255,255,0.12) 0%, transparent 55%);
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.12) 0%, transparent 55%);
     pointer-events: none;
 }
 
@@ -302,7 +296,7 @@ input[type="number"] { -moz-appearance: textfield; }
 }
 
 .btn-indigo:active {
-    transform: translateY(0px);
+    transform: translateY(0);
     box-shadow: 0 2px 10px rgba(92, 107, 192, 0.28);
 }
 
@@ -329,7 +323,7 @@ input[type="number"] { -moz-appearance: textfield; }
 }
 
 /* =========================================
-   Trip Header (edit.html)
+   Trip Header
    ========================================= */
 .trip-header {
     text-align: center;
@@ -384,7 +378,7 @@ input[type="number"] { -moz-appearance: textfield; }
 }
 
 /* =========================================
-   Timeline Layout
+   Timeline Layout (2カラムグリッド)
    ========================================= */
 .timeline-layout {
     display: grid;
@@ -414,8 +408,8 @@ input[type="number"] { -moz-appearance: textfield; }
     font-size: 0.85rem;
     font-family: inherit;
     cursor: pointer;
-    transition: all 0.2s;
     white-space: nowrap;
+    transition: all 0.2s;
 }
 
 .filter-btn:hover {
@@ -433,25 +427,21 @@ input[type="number"] { -moz-appearance: textfield; }
 }
 
 /* =========================================
-   Timeline Items
+   Timeline — 縦ステムライン
    ========================================= */
-
-/* タイムライン全体を包む親に縦ラインを引く */
 .timeline-view {
     position: relative;
 }
 
-
-
-/* timeline-item は glass-card も兼ねているので
-   glass-card のスタイルを上書き・追記する形で定義 */
+/* =========================================
+   Timeline Item
+   ========================================= */
 .timeline-item {
     display: flex;
     align-items: flex-start;
-    /* border-left を使わず、全体を囲むカードデザインに統一 */
-    border-left: none;
     margin-bottom: 12px;
     padding: 20px 22px;
+    /* glass-card の border-left をリセット（元コードのborder-leftなし） */
     position: relative;
     z-index: 1;
     transition: background 0.22s, border-color 0.22s, transform 0.22s, box-shadow 0.22s;
@@ -465,7 +455,7 @@ input[type="number"] { -moz-appearance: textfield; }
     box-shadow: 0 6px 28px rgba(0, 0, 0, 0.3);
 }
 
-/* staggered animation */
+/* staggered アニメーション */
 .timeline-item:nth-child(1) { animation-delay: 0.04s; }
 .timeline-item:nth-child(2) { animation-delay: 0.09s; }
 .timeline-item:nth-child(3) { animation-delay: 0.14s; }
@@ -477,10 +467,19 @@ input[type="number"] { -moz-appearance: textfield; }
 
 
 
+/* =========================================
+   Time Display
+   ========================================= */
 .time-disp {
     min-width: 64px;
     margin-right: 18px;
-    padding-left: 18px; /* ドットの分だけ右にずらす */
+    /*
+     * padding-left: ドット(left:51px) がtime-dispの左端に被らないよう
+     * padding分を加算してテキストをドットの右側に逃がす
+     * item padding-left(22px) + dot left(51px) - item padding-left(22px) = 29px が絶対位置
+     * time-disp 自体の左端から見ると: 29px - 22px = 約7px なので 12px 程度で十分
+     */
+    padding-left: 14px;
     font-weight: 700;
     color: var(--indigo-light);
     font-size: 1.15rem;
@@ -505,6 +504,9 @@ input[type="number"] { -moz-appearance: textfield; }
     white-space: nowrap;
 }
 
+/* =========================================
+   Activity Content
+   ========================================= */
 .act-content {
     flex-grow: 1;
     overflow-wrap: break-word;
@@ -543,7 +545,7 @@ input[type="number"] { -moz-appearance: textfield; }
     transform: translateX(3px);
 }
 
-/* v-html で <br> 変換済みなので white-space は normal のまま */
+/* v-html で <br> に変換済みなので white-space: normal のまま */
 .act-memo {
     font-size: 0.86rem;
     color: var(--text-sub);
@@ -553,7 +555,6 @@ input[type="number"] { -moz-appearance: textfield; }
     padding-top: 8px;
 }
 
-/* formatMemo で生成されるリンク */
 .memo-link {
     color: var(--indigo-light);
     text-decoration: underline;
@@ -562,6 +563,9 @@ input[type="number"] { -moz-appearance: textfield; }
 }
 .memo-link:hover { color: var(--text-main); }
 
+/* =========================================
+   Action Buttons
+   ========================================= */
 .act-actions {
     display: flex;
     flex-direction: column;
@@ -634,7 +638,6 @@ input[type="number"] { -moz-appearance: textfield; }
     gap: 9px;
 }
 
-/* h3 左のアクセントバー */
 .sticky-form h3::before {
     content: '';
     flex-shrink: 0;
@@ -669,8 +672,7 @@ input[type="number"] { -moz-appearance: textfield; }
     animation: fade-in 0.2s ease-out both;
 }
 
-/* glass-card と併用。border-radius / padding は glass-card から継承、
-   ここでは背景色・影だけ上書き */
+/* glass-card と併用。背景色・枠色・影のみ上書き */
 .modal-content {
     width: 92%;
     max-width: 500px;
@@ -754,11 +756,82 @@ input[type="number"] { -moz-appearance: textfield; }
     to   { opacity: 1; transform: translateY(0)    scale(1); }
 }
 
-/* index.html の生成URL完了後 fadeIn */
+/* index.html の完成カードに使われる fadeIn */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(8px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Vue レンダリング前のちらつき防止 */
 [v-cloak] { display: none; }
+
+/* === How-to Section === */
+.how-to-section {
+  max-width: 960px;
+  margin: 80px auto 0;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.how-to-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 48px;
+  letter-spacing: 0.05em;
+}
+
+.how-to-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+.step-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-card);
+  padding: 36px 24px 32px;
+  position: relative;
+  backdrop-filter: blur(8px);
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.step-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(92, 107, 192, 0.18);
+}
+
+.step-img {
+  width: 100%;
+  max-width: 180px;
+  height: 140px;
+  object-fit: contain;
+  margin-bottom: 24px;
+  opacity: 0.92;
+}
+
+.step-badge {
+  display: inline-block;
+  background: var(--indigo-accent);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 3px 12px;
+  border-radius: 99px;
+  margin-bottom: 12px;
+}
+
+.step-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0 0 10px;
+}
+
+.step-desc {
+  font-size: 0.88rem;
+  color: var(--text-sub);
+  line-height: 1.7;
+  margin: 0;
+}

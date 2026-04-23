@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /edit.html
+
+Sitemap: https://itini.ogawa.jp.net/sitemap.xml

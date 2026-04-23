@@ -1,79 +1,144 @@
 @charset "UTF-8";
 
+/*
+ * ブレークポイント設計
+ * ─────────────────────────────────────────
+ * PC              : 851px ~
+ *   2カラム / ステムライン＋ドット表示 / hover translateX あり
+ *
+ * Tablet          : 601px ~ 850px
+ *   1カラム縦積み / フォームが上 / sticky解除
+ *   ステムライン・ドット非表示 / hover translateX 無効
+ *   アクションボタン → カード下部横並び
+ *
+ * Mobile          : 421px ~ 600px
+ *   余白・フォントをさらに縮小
+ *   タッチターゲット確保 (min 44px)
+ *   iOSズーム防止 (font-size: 16px)
+ *   index.html の日付グリッド縦積み
+ *
+ * 極小 (small)    : ~ 420px
+ *   ロゴ・カード・ボタンを最小化
+ * ─────────────────────────────────────────
+ */
+
 /* =========================================
-   Tablet (max-width: 850px)
+   共通：グリッド子要素のはみ出し防止
+   grid-item / flex-item は min-width: auto がデフォルトのため
+   明示的に 0 を指定することで overflow を封じる
+   ========================================= */
+.timeline-view,
+.sidebar,
+.act-content {
+    min-width: 0;
+}
+
+/* =========================================
+   Day Filter — 全ブレークポイント共通の堅牢化
+   多日程 (14日など) でもはみ出さないよう
+   ・flex-wrap: wrap（複数行折り返し）
+   ・overflow-x: auto（折り返し後も溢れた場合はスクロール）
+   ・-webkit-overflow-scrolling でiOSの慣性スクロール
+   ========================================= */
+.day-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+    /* コンテナからはみ出した場合の最終防衛ライン */
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    /* スクロールバーは隠す（スクロール自体は有効） */
+    scrollbar-width: none;
+}
+.day-filter::-webkit-scrollbar {
+    display: none;
+}
+
+/* =========================================
+   Tablet (601px ~ 850px)
    ========================================= */
 @media (max-width: 850px) {
 
+    /* コンテナ余白を少し詰める */
     .container {
-        padding: 28px 14px 60px;
+        padding: 28px 16px 60px;
         width: 96vw;
     }
 
-    /* 縦1カラムに */
+    /* 1カラムに */
     .timeline-layout {
         grid-template-columns: 1fr;
-        gap: 22px;
+        gap: 24px;
     }
 
-    /* フォームを上に */
-    .sidebar { order: -1; }
-    .sticky-form { position: static; }
+    /* フォームをタイムラインの上に */
+    .sidebar       { order: -1; }
+    .sticky-form   { position: static; }
 
-    /* タブレットでは縦ステムライン・ドットを非表示
-       （縦積みレイアウトでは left: 53px が意味をなさないため） */
-
+    /* time-disp の padding-left (ドット回避用) をリセット */
+    .time-disp {
+        padding-left: 0;
+        min-width: 56px;
+        margin-right: 16px;
+    }
 
     .timeline-item {
         padding: 18px 20px;
         flex-wrap: wrap;
-        /* hover で translateX しない（横スクロールの原因になるため） */
+        /* 縦積みでは横スクロールを誘発するので translateX を無効化 */
         transition: background 0.22s, border-color 0.22s, box-shadow 0.22s;
     }
     .timeline-item:hover { transform: none; }
 
-    /* time-disp のパディングオフセットも解除 */
-    .time-disp {
-        font-size: 1rem;
-        min-width: 52px;
-        margin-right: 14px;
-        padding-left: 0;
-    }
-
-    /* アクションボタンを下部横並びに */
+    /*
+     * アクションボタンを右下横並びに
+     * flex-wrap: wrap の恩恵でコンテンツ行の下に自然に落ちる
+     */
     .act-actions {
         flex-direction: row;
         width: 100%;
         justify-content: flex-end;
-        margin-top: 14px;
+        margin-top: 12px;
         margin-left: 0;
         padding-top: 10px;
         border-top: 1px solid rgba(255, 255, 255, 0.06);
         gap: 10px;
     }
+
+    /* タッチしやすい大きさに */
     .action-btn {
         width: 44px;
         height: 44px;
         font-size: 1rem;
         border-radius: 10px;
     }
+
+    /* Day Filter — タブレットでは横スクロール1行に切り替え */
+    .day-filter {
+        flex-wrap: nowrap;   /* 折り返しせず1行で横スクロール */
+        gap: 7px;
+    }
 }
 
 /* =========================================
-   Mobile (max-width: 600px)
+   Mobile (421px ~ 600px)
    ========================================= */
 @media (max-width: 600px) {
 
     /* ロゴ */
-    .logo-main  { font-size: 3rem; }
-    .logo-ruby  { font-size: 0.72rem; }
-    .main-header { margin-bottom: 30px; }
+    .logo-main   { font-size: 3rem; }
+    .logo-ruby   { font-size: 0.72rem; }
+    .main-header { margin-bottom: 32px; }
 
     /* トリップヘッダー */
     .trip-header h2 {
         font-size: 1.6rem;
+        overflow-wrap: break-word;
         word-break: break-all;
     }
+    /* タグを縦並びに */
     .trip-header > p {
         flex-direction: column;
         gap: 6px;
@@ -86,55 +151,107 @@
         border-radius: 14px;
     }
 
-    /* フォーム */
+    /* フォーム — iOSで16px未満だと自動ズームが発生するので上書き */
     label { font-size: 0.85rem; }
     input,
     select,
     textarea {
-        font-size: 16px; /* iOSズーム防止 */
+        font-size: 16px;
         padding: 11px 13px;
     }
+    input[type="time"] {
+        padding-right: 40px;
+        min-height: 46px;
+    }
+    select { padding-right: 38px; }
 
-    /* ボタン */
+    /* ボタン — タッチしやすく */
     .btn-indigo,
-    .btn-cancel { padding: 14px; font-size: 1rem; }
+    .btn-cancel {
+        padding: 14px;
+        font-size: 1rem;
+    }
 
     /* タイムライン */
-    .timeline-item   { padding: 14px 16px; margin-bottom: 10px; }
-    .time-disp       { font-size: 0.95rem; min-width: 46px; margin-right: 12px; }
-    .act-name        { font-size: 0.99rem; }
-    .act-location    { font-size: 0.81rem; }
-    .act-memo        { font-size: 0.83rem; }
+    .timeline-item  { padding: 14px 16px; margin-bottom: 10px; }
+    .time-disp      { font-size: 0.95rem; min-width: 48px; margin-right: 12px; }
+    .act-name       { font-size: 1rem; }
+    .act-location   { font-size: 0.82rem; }
+    .act-memo       { font-size: 0.84rem; }
 
-    /* フィルター */
-    .day-filter  { gap: 6px; }
-    .filter-btn  { padding: 6px 12px; font-size: 0.82rem; }
+    /* Day Filter — モバイルでも1行横スクロール */
+    .day-filter {
+        flex-wrap: nowrap;
+        gap: 6px;
+        margin-bottom: 18px;
+        /* スクロール位置を先頭に揃える */
+        justify-content: flex-start;
+    }
+    /* ボタンサイズをコンパクトに */
+    .filter-btn {
+        padding: 6px 13px;
+        font-size: 0.82rem;
+        /* タッチターゲット確保のため高さを保つ */
+        min-height: 34px;
+    }
 
-    /* モーダル */
-    .modal-content { width: 96%; padding: 22px 18px; }
+    /* モーダル — 画面幅いっぱいに近づける */
+    .modal-content {
+        width: 96%;
+        padding: 22px 18px;
+    }
 
-    /* アコーディオン展開ボタン */
+    /*
+     * index.html の日付・日数グリッド縦積み対応
+     * HTML側に inline style="display:grid; grid-template-columns:2fr 1fr" があるため
+     */
+    div[style*="grid-template-columns"] {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* アコーディオンのボタンは横幅いっぱいに */
     .expand-section button {
         width: 100% !important;
         border-radius: 12px !important;
     }
 
-    /* index.html の日付・日数グリッドを縦積みに
-       （inline style で grid が書かれているので !important で上書き） */
-    .container main > .glass-card > div[style*="grid"] {
-        grid-template-columns: 1fr !important;
-    }
-
     /* フッター */
-    .main-footer { margin-top: 56px; padding: 28px 0; }
+    .main-footer {
+        margin-top: 60px;
+        padding: 28px 0;
+    }
 }
 
 /* =========================================
-   極小 (max-width: 380px)
+   極小 (~ 420px)
+   iPhone SE 第1世代 / 古い Android 等
    ========================================= */
-@media (max-width: 380px) {
-    .logo-main      { font-size: 2.6rem; }
+@media (max-width: 420px) {
+
+    .logo-main { font-size: 2.6rem; }
+    .logo-ruby { font-size: 0.68rem; }
+
     .trip-header h2 { font-size: 1.4rem; }
-    .glass-card     { padding: 14px 12px; }
-    .filter-btn     { padding: 5px 10px; font-size: 0.78rem; }
+
+    .glass-card { padding: 14px 12px; }
+
+    /* フィルターボタンをさらに詰める */
+    .filter-btn {
+        padding: 5px 10px;
+        font-size: 0.78rem;
+        min-height: 32px;
+    }
+
+    /* アクションボタンのタッチ領域を維持 */
+    .action-btn { width: 44px; height: 44px; }
+}
+
+@media (max-width: 768px) {
+  .how-to-steps {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .how-to-title {
+    font-size: 1.3rem;
+  }
 }
