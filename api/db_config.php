@@ -5,7 +5,7 @@ $is_local = ($_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['SERVER_ADDR'] ==
 if ($is_local) {
     // --- ローカル環境用 ---
     $host     = 'localhost';
-    $dbname   = 'itini_db';  // ※あなたのローカルのDB名に合わせてください
+    $dbname   = 'laa1188250-itini';  // ※あなたのローカルのDB名に合わせてください
     $user     = 'root';
     $password = '';
 } else {
